@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Messager Bolado</string>
+    <string name="label_macAdd">Valor do Endereço Mac do Dispositivo.</string>
+    <string name="ButtonText">Enviar Mensagem</string>
+    <string name="msgString">Insira sua Mensagem</string>
+</resources>

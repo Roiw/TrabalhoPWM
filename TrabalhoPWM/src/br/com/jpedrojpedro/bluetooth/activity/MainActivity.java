@@ -44,8 +44,10 @@ public class MainActivity extends Activity
 	      UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
 	// Insert your bluetooth devices MAC address
-	//private static String address = "00:1C:7B:AC:B7:49";
-	private static String address = "20:13:06:19:16:37";
+	//private static String address = "00:1C:7B:AC:B7:49"; // Meu computador
+	//private static String address = "20:13:06:19:16:37"; // Bluetooth malocado
+	private static String address = "20:13:11:06:22:85";
+	
 	
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -77,7 +79,9 @@ public class MainActivity extends Activity
   	  		{
   	  			// TODO Auto-generated method stub
   	  		    address = macAddress.getText().toString();
-  	  		    sendData(msgTextView.getText().toString());
+  	  		  //  sendData(msgTextView.getText().toString());
+  	  		    final Context context = v.getContext();
+  	  		    PlayWav(context.getResources().openRawResource(R.raw.mambo));
   	  		}
   	      });
   	        
@@ -190,18 +194,17 @@ public class MainActivity extends Activity
       }
 
     
-    private void PlayWav(String location, View v)
+    private void PlayWav(InputStream is)
     {
     	// Faz um byteArray ;-)
-    	final Context context = v.getContext();
+    	
         int bytesRead;
     	try
     	{
-	    	InputStream is = context.openFileInput(location);
 	
 	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	
-	        byte[] b = new byte[1024];
+	        byte[] b = new byte[10240];
 	
 	        while ((bytesRead = is.read(b)) != -1) 
 	        {
@@ -210,11 +213,36 @@ public class MainActivity extends Activity
 	
 	        byte[] bytes = bos.toByteArray();
 	        System.out.println(" One random values is: "+bytes[5]+" \n");
+	        
+	        if ( bytes != null )
+	        {
+	        	int aux = 0;
+	        	String strAux = "";
+	        	while(bytes.length > aux)
+	        	{
+	        		if ( aux%1200 == 0)
+	        		{
+	        			sendData(strAux);
+	        			strAux = "";
+	        		}
+	        	//	if ( aux%1200 == 0)
+	        	//	{
+	        	//		sendData(strAux);
+	        	//		strAux = "";
+	        	//	}
+	        	//	Thread.sleep(2);
+	        		strAux += bytes[aux];
+	        		aux++;
+	        	}
+	        }
+	        
     	}catch(Exception e) 
     	{
             Toast.makeText(this, "Error starting draw. ",Toast.LENGTH_SHORT).show();
 
-        }     
+        }  
+    	
+    	
     	
     	
            
